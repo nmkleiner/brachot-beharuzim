@@ -21,22 +21,33 @@
 
     <!-- CANVAS MODAL -->
     <div class="modal flex-column">
-        <!-- MODAL HEADER -->
-        <header class="modal-top-container ">
-            <button class="btn btn-back btn-md" onclick="onBackBtn()">
-                <i class="fas fa-2x fa-inverse fa-arrow-circle-left"></i> <span class="buttons-text">Go Back</span>
-            </button>
-        </header>
-
         <!-- MODAL MID CONTAINER (CANVAS & CAPTIONS) -->
         <div class="modal-mid-and-bot-container justify-content-center">
 
             <div class="modal-mid-container d-flex flex-column">
                 <select 
+                    class="caption"
                     type="text" 
                     id="top-txt" 
-                    class="caption" 
-                    onchange="onTxtChange(this.value,false)" 
+                    onchange="onUpperTxtChange(this.value)" 
+                    onfocus="onTxtFocus()"
+                    placeholder="Add your text"
+                >
+                <option>
+                    בחר פסקה
+                </option>
+                <option value='לא, זה לא חלום!. לשלומי חוגגים היום!.איש השכר המוצלח,.הרמ"ד התותח'>
+                        לא, זה לא חלום לשלומי חוגגים היום! איש השכר המוצלח,.הרמ"ד התותח!
+                </option>
+                <option value='נאחל שבכל תפקיד תחווה הצלחה,.כולנו מעריכים אותך.שלא תעבוד עם אנשים מוזרים,.שיהיה עד מאה ועשרים!.'>
+                        נאחל שבכל תפקיד תחווה הצלחה,.כולנו מעריכים אותך.שלא תעבוד עם אנשים מוזרים,.שיהיה עד מאה ועשרים!.
+                </option>
+                </select>
+                <select 
+                    class="caption"
+                    type="text" 
+                    id="top-txt" 
+                    onchange="onLowerTxtChange(this.value)" 
                     onfocus="onTxtFocus()"
                     placeholder="Add your text"
                 >
@@ -54,7 +65,7 @@
                     type="text" 
                     class="caption" 
                     id="txt-editor" 
-                    oninput="onTxtChange(this.value,true)" 
+                    oninput="onTxtChange(this.value)" 
                     onfocus="onTxtFocus()"
                     placeholder="Add your text"
                 ></textarea>
@@ -68,13 +79,13 @@
                     <div class="btns-plus-minus-shadow d-flex justify-content-between">
                         <div class="font-size-group-item d-flex">
                             <span class="font-size-minus-group-btn">
-                                <button type="button" class="font-nimus-btn btn btn-light btn-number" ondblclick="onFontSizeClick(-10)"
+                                <button type="button" class="font-nimus-btn btn btn-light btn-number"
                                     onclick="onFontSizeClick(-1)">
                                     <i class="fas fa-font fa-sm"></i>
                                 </button>
                             </span>
                             <span class="font-size-plus-group-btn">
-                                <button type="button" class="font-plus-btn btn btn-light btn-number" ondblclick="onFontSizeClick(10)"
+                                <button type="button" class="font-plus-btn btn btn-light btn-number"
                                     onclick="onFontSizeClick(1)">
                                     <i class="fas fa-font fa-lg"></i>
                                 </button>
@@ -82,31 +93,20 @@
                         </div>
                     </div>
                     <div class="arrow-btns-container d-flex justify-content-around">
-                        <button class="btn btn-md btn-arrow" ondblclick="onXChange(-30)" onclick="onXChange(-5)"><i
+                        <button class="btn btn-md btn-arrow" onclick="onXChange(-5)"><i
                                 class="fas fa-arrow-left"></i></button>
-                        <button class="btn btn-md btn-arrow" ondblclick="onXChange(30)" onclick="onXChange(5)"><i class="fas fa-arrow-right"></i></button>
-                        <button class="btn btn-md btn-arrow" ondblclick="onYChange(-30)" onclick="onYChange(-5)"><i
+                        <button class="btn btn-md btn-arrow" onclick="onXChange(5)"><i class="fas fa-arrow-right"></i></button>
+                        <button class="btn btn-md btn-arrow" onclick="onYChange(-5)"><i
                                 class="fas fa-arrow-up"></i></button>
-                        <button class="btn btn-md btn-arrow" ondblclick="onYChange(30)" onclick="onYChange(5)"><i class="fas fa-arrow-down"></i></button>
-                        <button class="btn btn-md btn-add-row" onclick="onAddNewLine('center')">--</button>
-                        <button class="btn btn-md btn-add-bot-row" onclick="onAddNewLine('bottom')">__</button>
+                        <button class="btn btn-md btn-arrow" onclick="onYChange(5)"><i class="fas fa-arrow-down"></i></button>
+                        <!-- <button class="btn btn-md btn-add-row" onclick="onAddNewLine('center')">--</button>
+                        <button class="btn btn-md btn-add-bot-row" onclick="onAddNewLine('bottom')">__</button> -->
                         <button class="btn btn-md btn-remove-row" onclick="onRemoveLine()"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
                 <div class="color-container-item">
                     <div class="color-fill-or-stroke-buttons d-flex justify-content-center">
-                        <span>
-                            <button type="button" class="btn btn-light" onclick="onFillOrStrokeChange('stroke')">
-                                <i class="fas fa-pencil-alt"></i>
-                            </button>
-                        </span>
-                        <span>
-                            <button type="button" class="btn btn-light" onclick="onFillOrStrokeChange('fill')">
-                                <i class="fas fa-fill"></i>
-                            </button>
-                        </span>
-                        <span><input class="color-picker" type="color" name="favcolor" value="#ff0000" onchange="onColorChange(this.value)"></span>
-
+                        <input class="color-picker" type="color" name="favcolor" value="#ff0000" onchange="onColorChange(this.value)">
                     </div>
                     <div class="colors-btns d-flex justify-content-center">
                         <button class="btn btn-primary" value="#0069d9" onclick="onColorChange(this.value)"></button>

@@ -6,21 +6,37 @@ var gOffset = {}
 var gCtx
 var gCurrImg = {}
 var gCurrTxtLoc
-var gFillOrStroke = 'fill';
 
 
 function init() {
+    console.log('init')
+    // listenToEnter()
     gScreenSizes = getScreenSizes()
-    setCategoriesForStorgae()
     createImgs()
     renderImgs()
     // initCanvas()
+    const elImg = document.querySelector('#img-001')
+    setTimeout(() => setCanvas(elImg,1),50)
 }
 
+function onGalleryImgClick(elImg, imgId) {
+    console.log('onGalleryImgClick')
+    setCanvas(elImg, imgId)
+}
 
-
+function setCanvas(elImg, imgId) {
+    console.log('setCanvas')
+    initCanvas()
+    initMeme()
+    setMemeByImgId(imgId)
+    gCurrImg = createImg(elImg.src)
+    setCanvasImg(elImg)
+    drawImage(gCurrImg)
+}
 
 function initCanvas() {
+    console.log('initCanvas')
+
     if (gCanvas) return;
     gCanvas = document.querySelector('#canvas');
     gCtx = gCanvas.getContext('2d');
@@ -28,81 +44,100 @@ function initCanvas() {
 
 
 function renderImgs() {
+    console.log('renderImgs')
     var imgs = getImgs();
     var elImgsContainer = document.querySelector('.imgs-container')
     var strHtmls = ''
     for (let i = 0; i < imgs.length; i++) {
-        var currImgUrl = imgs[i].url;
-        var currImgId = imgs[i].id;
-        var strHtml = `<img  class = "gallery-img" src="${currImgUrl}" alt="Img Here" onclick = "onGalleryImgClick(this, ${currImgId})">`;
+        const currImgUrl = imgs[i].url;
+        const currImgId = imgs[i].id;
+        const strHtml = `<img 
+            id="img-${currImgId}"  
+            class="gallery-img" 
+            src="${currImgUrl}" 
+            alt="Img Here" 
+            onclick="onGalleryImgClick(this, ${currImgId})
+        ">`;
         strHtmls += strHtml;
     }
     elImgsContainer.innerHTML = strHtmls;
 }
 
-
-function onBackBtn() {
-    toggleModal()
-}
-
-function onFillOrStrokeChange(fillOrStroke) {
-    gFillOrStroke = (fillOrStroke === 'stroke') ? 'stroke' : 'fill';
-
-}
-
 function onColorChange(color) {
-    (gFillOrStroke === 'stroke') ? changeStrokeColor(color, gCurrTxtLoc) : changeFillColor(color, gCurrTxtLoc);
+    console.log('onColorChange')
+    changeFillColor(color, gCurrTxtLoc);
     renderCanvas()
 }
 
-function onTxtChange(value,isTextEditor) {
-    // listenToEnter()
-    gCurrTxtLoc;
+function onTxtChange(value) {
+    console.log('onTxtChange')
     addText(gCurrTxtLoc, value);
-    if (!isTextEditor) pushToTextarea(value);
     updateX(0)
     renderCanvas()
 }
 
+function onUpperTxtChange(value) {
+    console.log('onUpperTxtChange')
+    addText(0, value);
+    pushToTextarea(value);
+    updateX(0)
+    initNewLine(0)
+    renderCanvas()
+}
+
+function onLowerTxtChange(value) {
+    console.log('onLowerTxtChange')
+    addText(1, value);
+    pushToTextarea(value);
+    updateX(0)
+    initNewLine(1)
+    renderCanvas()
+}
+
+
+
+
+
+
+
 function onTxtFocus() {
+    console.log('onTxtFocus')
     if (!gCurrTxtLoc) gCurrTxtLoc = 0;
     if (!gMeme.txts[0]) createNewText();
 }
 
 function onFontSizeClick(fontSizeNum) {
-    changeFontSize(fontSizeNum, gCurrTxtLoc)
+    console.log('onFontSizeClick')
+    changeFontSize(fontSizeNum)
     updateX(0)
     updateY(0)
     renderCanvas()
 }
 
 function onDownload(elLink) {
+    console.log('onDownload')
     elLink.href = gCanvas.toDataURL()
     elLink.download = 'new-cool-meme.jpg'
 }
 
-function onGalleryImgClick(elImg, imgId) {
-    initCanvas()
-    setMemeByImgId(imgId)
-    toggleModal()
-    gCurrImg = createImg(elImg.src)
-    setCanvas(elImg)
-    drawImage(gCurrImg)
-}
+
 
 function createImg(imgSrc) {
+    console.log('createImg')
     var img = new Image()
     img.src = imgSrc
     return img
 }
 
 function onResize() {
+    console.log('onResize')
     if (!gCanvas) return;
-    setCanvas()
+    setCanvasImg()
     drawImage(gCurrImg)
 }
 
-function setCanvas() {
+function setCanvasImg() {
+    console.log('setCanvasImg')
     var heightFactor = gCurrImg.height / gCurrImg.width
 
     if (window.innerWidth > 768) {
@@ -122,18 +157,22 @@ function setCanvas() {
 }
 
 function drawImage(img) {
+    console.log('drawImage')
+    // console.log(img)
     gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height)
 }
 
 function onCanvasClick(ev) {
     var x = ev.clientX - gOffset.left;
     var y = ev.clientY - gOffset.top;
+    console.log('x,y', x, y)
     var texts = gMeme.txts
     var lineIdx = gMeme.txts.findIndex(txt => {
         var botY = txt.lineYRange[1];
         var topY = txt.lineYRange[0];
         var leftX = txt.lineXRange[0];
         var rightX = txt.lineXRange[1];
+        console.log('x-x,y-y', leftX, '-', rightX, ',', botY, '-', topY)
         return (y < botY - 5 &&
             y > topY + 5 &&
             x > leftX - 5 &&
@@ -151,16 +190,19 @@ function onCanvasClick(ev) {
 }
 
 function onXChange(xDiff) {
+    console.log('onXChange')
     updateX(xDiff, gCurrTxtLoc)
     renderCanvas()
 }
 
 function onYChange(yDiff) {
+    console.log('onYChange')
     updateY(yDiff, gCurrTxtLoc)
     renderCanvas()
 }
 
 function drawFrame(line) {
+    console.log('drawFrame')
     var txt = gMeme.txts[line]
     gCtx.beginPath()
     gCtx.save()
@@ -172,13 +214,10 @@ function drawFrame(line) {
 }
 
 
-function onAddNewLine(loc) {
-    createNewText(loc)
-    initCaption()
-    renderCanvas()
-}
+
 
 function onRemoveLine() {
+    console.log('onRemoveLine')
     deleteText(gCurrTxtLoc)
     document.querySelector('.caption').value = ''
     renderCanvas()
@@ -186,6 +225,7 @@ function onRemoveLine() {
 
 
 function renderCanvas() {
+    console.log('renderCanvas')
     var meme = getMeme();
 
     // draw img
@@ -202,13 +242,11 @@ function renderCanvas() {
         lineX = currTxt.lineX;
         gCtx.font = `${currTxt.fontSize}px ${currTxt.fontFamily}`
         gCtx.fillStyle = currTxt.fillColor
-        gCtx.strokeStyle = currTxt.strokeColor
         gCtx.textAlign = currTxt.align
         // draws the text in the canvas
-        currTxt.lines.forEach((line,idx) => {
+        currTxt.lines.forEach((line, idx) => {
             let lineY = currTxt.lineY + (idx * currTxt.fontSize)
             gCtx.fillText(line, lineX, lineY)
-            gCtx.strokeText(line, lineX, lineY)
         })
     }
 }

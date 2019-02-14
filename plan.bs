@@ -1,0 +1,9 @@
+
+-prepare profession, name etc. inputs
+-check canvas clicks in mobile
+-make row down on enter possible with listen to enter
+
+V-canvas will init on start
+V-selects are too fuckin wide
+V-make sure it all fits mobile
+-remove black bc from control-box

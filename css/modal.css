@@ -1,9 +1,6 @@
 .modal {
-    display: none;
-    background-color: black;
-    z-index: 1;
-    position: fixed;
-    height: 100vh;
+    display: flex;
+    position: relative;
     width: 100%;
     align-items: center;
     flex-direction: column;
@@ -12,14 +9,6 @@
 
 #txt-editor{ 
     direction: rtl;
-}
-
-.modal header {
-    width: 100vw;
-    position: relative;
-}
-.modal header .btn{
-background-color: transparent;
 }
 
 .modal-mid-and-bot-container{

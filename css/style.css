@@ -5,3 +5,8 @@
 @import "checkbox.css";
 @import "footer.css";
 
+
+
+* {
+    direction: rtl;
+}
